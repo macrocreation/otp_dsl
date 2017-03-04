@@ -11,15 +11,20 @@ defmodule OtpDsl.Genserver do
 #    tracing       = Keyword.get(options, :trace,         false)
 
     quote do
-      use GenServer.Behaviour
+      use GenServer
       import unquote(__MODULE__)
 
       if unquote(register) do
         def my_name do
-          elem(unquote(register), 1)
+          unquote(
+	    case register do 
+	      {:local, _ } -> elem(register,1)
+	      _ -> register
+	    end
+	  )
         end
 
-        def start_link() do
+      def start_link() do
           :gen_server.start_link(unquote(register), __MODULE__, unquote(initial_state), [])
         end
       else
@@ -79,7 +84,7 @@ defmodule OtpDsl.Genserver do
 
     quote do
       def unquote(defn) do
-        :gen_server.call(my_name, {unquote(name), unquote_splicing(params)})
+        :gen_server.call(my_name(), {unquote(name), unquote_splicing(params)})
       end
 
       def handle_call({unquote(name), unquote_splicing(params)}, var!(_from, nil), unquote(state_name)) do
@@ -136,7 +141,7 @@ defmodule OtpDsl.Genserver do
 
     quote do
       def unquote(defn) do
-        :gen_server.cast(my_name, {unquote(name), unquote_splicing(params)})
+        :gen_server.cast(my_name(), {unquote(name), unquote_splicing(params)})
       end
 
       def handle_cast({unquote(name), unquote_splicing(params)}, unquote(state_name)) do
@@ -168,6 +173,6 @@ defmodule OtpDsl.Genserver do
   def name_from(module_name) do
     Regex.replace(~r{(.)\.?([A-Z])}, inspect(module_name), "\\1_\\2")
     |> String.downcase
-    |> binary_to_atom
+    |> :erlang.binary_to_atom(:latin1)
   end
 end
