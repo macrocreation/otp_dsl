@@ -84,7 +84,7 @@ defmodule OtpDsl.Genserver do
 
     quote do
       def unquote(defn) do
-        :gen_server.call(my_name(), {unquote(name), unquote_splicing(params)})
+        :gen_server.call(my_name(), {unquote(name), unquote_splicing(params)}, :infinity)
       end
 
       def handle_call({unquote(name), unquote_splicing(params)}, var!(_from, nil), unquote(state_name)) do
