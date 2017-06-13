@@ -6,19 +6,13 @@ defmodule OtpDsl.Genserver2 do
 
   @doc nil
   defmacro __using__(options) do
-    initial_state = Keyword.get(options, :initial_state, nil)
-#    tracing       = Keyword.get(options, :trace,         false)
 
     quote do
       use GenServer
       import unquote(__MODULE__)
       
-      def start_link() do
-        :gen_server.start_link(__MODULE__, unquote(initial_state), [])
-      end    
-
-      def start_link(opts \\ []) do
-        GenServer.start_link(__MODULE__, unquote(initial_state), opts)
+      def start_link(state, opts \\ []) do
+        GenServer.start_link(__MODULE__, unquote(state), opts)
       end    
 
     end
