@@ -12,7 +12,7 @@ defmodule OtpDsl.Genserver2 do
       import unquote(__MODULE__)
       
       def start_link(state, opts \\ []) do
-        GenServer.start_link(__MODULE__, unquote(state), opts)
+        GenServer.start_link(__MODULE__, state, opts)
       end    
 
     end
