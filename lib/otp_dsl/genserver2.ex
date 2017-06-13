@@ -17,8 +17,8 @@ defmodule OtpDsl.Genserver2 do
         :gen_server.start_link(__MODULE__, unquote(initial_state), [])
       end    
 
-      def start_link(servername) do
-        :gen_server.start_link(servername, __MODULE__, unquote(initial_state), [])
+      def start_link(opts \\ []) do
+        GenServer.start_link(__MODULE__, unquote(initial_state), opts)
       end    
 
     end
