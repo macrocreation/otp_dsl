@@ -116,7 +116,7 @@ defmodule OtpDsl.Genserver2 do
   In this example, we make the state available in the variable
   `history`.
   """
-  defmacro defcast({name, _meta, params}=defn, state_name \\ {@hidden_state_name, [], nil}, do: body) do
+  defmacro defcast({name, meta, params}=defn, state_name \\ {@hidden_state_name, [], nil}, do: body) do
     quote do
       def unquote({name, meta, [{:pid, meta, nil}] ++ params}) do
         :gen_server.cast(unquote({:pid, meta, nil}), {unquote(name), unquote_splicing(params)})
