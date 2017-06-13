@@ -12,9 +12,15 @@ defmodule OtpDsl.Genserver2 do
     quote do
       use GenServer
       import unquote(__MODULE__)
+      
       def start_link() do
         :gen_server.start_link(__MODULE__, unquote(initial_state), [])
       end    
+
+      def start_link(servername) do
+        :gen_server.start_link(servername, __MODULE__, unquote(initial_state), [])
+      end    
+
     end
   end
 
